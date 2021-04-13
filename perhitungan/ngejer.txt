@@ -1,0 +1,26 @@
+Rotasi: 
+semua kecuali x' dan y' adalah data
+x' ->  |cos x -sin x| |x-x0| + |x0|
+y' ->  |sin x  cos x| |y-y0| + |y0|
+
+Cari sudut:
+a dan b -> data_raw (harus dikurangin pusat)
+c^2 = sqrt(a^2+b^2); -> pitagoras
+
+sin->demi
+sin x = b/c
+x = arcsin (b/c); -> ketemu sudutnya
+
+gerak menuju titik: data -> x0,y0,x1,y1
+persamaan linear 2 variabel -> (x-x1)/(x2-x1) = (y-y1)/(y2-y1)
+(y-y1)/(x-x1)=(y2-y1)/(x2-x1)
+y-y1 = ((y2-y1)(x-x1))/(x2-x1)
+y = ((y2-y1)(x-x1))/(x2-x1) + y1;
+//invers:
+x = (x2-x1)(y-y1)/(y2-y1) + x1;
+
+testing -> 0,0 dan 5,0 -> y = 0.x/5 + 0 -> y = 0 -> y selalu 0
+testing -> 0,-3 dan 0,7 -> y = 10.(x+3)/0 + -3 -> y = -3 ?? 
+kesimpulan => saat x sama -> y gerak ke tujuan dan kebalikanxa
+
+
