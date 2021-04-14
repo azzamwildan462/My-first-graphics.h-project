@@ -1,58 +1,87 @@
-#include <graphics.h>
-#include <iostream>
-
+#include "tes.cpp"
 using namespace std;
 
-void gerak_pemain(int *x_awal, int *y_awal)
+class bullet
 {
-    if (ismouseclick(WM_LBUTTONDOWN))
-    {
-        clearmouseclick(WM_LBUTTONDOWN);
-        while (1)
-        {
-            if (ismouseclick(WM_LBUTTONDOWN))
-            {
-                clearmouseclick(WM_LBUTTONDOWN);
-                break;
-            }
-            getmouseclick(WM_MOUSEMOVE, *x_awal, *y_awal);
+private:
+    float xpos, ypos, size, speed;
+    float rx, ry;
+    int kindd;
 
-            delay(300);
+public:
+    bullet(float x, float y, float speed_ms, int kind)
+    {
+        xpos = x;
+        ypos = y;
+        speed = speed_ms;
+        kindd = kind;
+    }
+    void make_rad()
+    {
+        if (kindd == 1)
+        {
+            rx = 2;
+            ry = 10;
+        }
+        else if (kindd == 2)
+        {
+            rx = 5;
+            ry = 25;
+        }
+        else if (kindd == 3)
+        {
+            rx = 10;
+            ry = 50;
         }
     }
-    cleardevice();
-}
+    void draw_bullet()
+    {
+        make_rad();
+        init_bullet(xpos, ypos, rx, ry);
+    }
+};
 
 class main_char
 {
 private:
-    int *x_pos_address;
-    int *y_pos_address;
-    int *size_address;
-    int *hitpoints;
+    float xpos, ypos, health, size, angle, speed = 0.5;
+    int xh, yh;
 
 public:
-    main_char(int *x, int *y, int *size, int *HP)
+    main_char(float x, float y, float hp, float sz, float ang)
     {
-        x_pos_address = x;
-        y_pos_address = y;
-        size_address = size;
-        hitpoints = HP;
+        xpos = x;
+        ypos = y;
+        health = hp;
+        size = sz;
+        angle = ang;
+        init_tank(x, y, sz, ang);
     }
-    void set_pos(int x_pos, int y_pos)
+    void get_pos(float *x, float *y)
     {
-        *x_pos_address = x_pos;
-        *y_pos_address = y_pos;
+        *x = xpos;
+        *y = ypos;
     }
-    void get_pos(int *x_pos_target, int *y_pos_target)
+    void move_tank_by_mouse()
     {
-        *x_pos_target = *x_pos_address;
-        *y_pos_target = *y_pos_address;
+        find_mouse_pos(&xh, &yh);
+        move_tank(xpos, ypos, xh, yh, size, &angle, speed, &xpos, &ypos);
     }
-    void move(int jarak_x, int jarak_y)
+    float get_x_pos()
     {
-        *x_pos_address += jarak_x;
-        *y_pos_address += jarak_y;
+        return xpos;
+    }
+    float get_y_pos()
+    {
+        return ypos;
+    }
+    float get_size_tank()
+    {
+        return size;
+    }
+    float get_angle_tank()
+    {
+        return angle;
     }
 };
 
@@ -60,18 +89,32 @@ main()
 {
     int x = 30, y = 30, xbenda = 150, ybenda = 150, size = 20, HP = 100;
     bool klik;
-    // initwindow(500, 500);x
-    // circle(xbenda, ybenda, 20);
-    // while (!kbhit())
-    // {
+    initwindow(400, 400);
 
-    //     gerak_pemain(&xbenda, &ybenda);
-    //     circle(xbenda, ybenda, 20);
-    // }
-    // closegraph();
+    main_char tank(100, 100, 100, 10, 0);
+    bullet bullet1(200, 200, 0.5, 1);
+    bullet bullet2(250, 250, 0.5, 2);
+    bullet bullet3(300, 300, 0.5, 3);
+    while (!kbhit())
+    {
+        while (ismouseclick(WM_RBUTTONDOWN))
+        {
+            init_tank(tank.get_x_pos(), tank.get_y_pos(), tank.get_size_tank(), tank.get_angle_tank());
+            while (ismouseclick(WM_RBUTTONUP))
+            {
+                tank.move_tank_by_mouse();
+                clearmouseclick(WM_RBUTTONUP);
+                clearmouseclick(WM_RBUTTONDOWN);
+            }
+        }
+        init_tank(tank.get_x_pos(), tank.get_y_pos(), tank.get_size_tank(), tank.get_angle_tank());
+        // ellipse(200, 200, 0, 360, 2, 10);
+        bullet1.draw_bullet();
+        bullet2.draw_bullet();
+        bullet3.draw_bullet();
+        delay(20);
+        cleardevice();
+    }
 
-    // main_char AWM462(&x, &y, &size, &HP);
-    // cout << "x = " << x << ", y = " << y << ", size = " << size << endl;
-    // AWM462.move(20, 40);
-    // cout << "x = " << x << ", y = " << y << ", size = " << size << endl;
+    return 0;
 }

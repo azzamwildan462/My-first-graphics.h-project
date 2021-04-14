@@ -4,6 +4,11 @@
 
 using namespace std;
 
+void init_bullet(float xpos, float ypos, float rx, float yx)
+{
+    ellipse(xpos, ypos, 0, 360, rx, yx);
+}
+
 float find_direction(float xpos, float ypos, float xtarget, float ytarget)
 {
     float result, temp;
@@ -297,35 +302,35 @@ void move_tank(float xpos, float ypos, float xtarget, float ytarget, float size,
     *angle = temp_angle;
 }
 
-int main()
-{
-    float xpos = 200, ypos = 200;
-    float x = 200, y = 200;
-    float xtes = 0, ytes = 400, angle = 90;
-    int p = 100, q = 100;
-    initwindow(800, 800);
+// int main()
+// {
+//     float xpos = 200, ypos = 200;
+//     float x = 200, y = 200;
+//     float xtes = 0, ytes = 400, angle = 90;
+//     int p = 100, q = 100;
+//     initwindow(800, 800);
 
-    // linear_line(5, &y, 0, 2, 10, 4);
-    // printf("%f", y);
+//     // linear_line(5, &y, 0, 2, 10, 4);
+//     // printf("%f", y);
 
-    while (!kbhit())
-    {
-        while (ismouseclick(WM_RBUTTONDOWN))
-        {
-            init_tank(xpos, ypos, 10, angle);
-            while (ismouseclick(WM_RBUTTONUP))
-            {
-                find_mouse_pos(&p, &q);
-                move_tank(xpos, ypos, p, q, 10, &angle, 0.5, &xpos, &ypos);
-                clearmouseclick(WM_RBUTTONUP);
-                clearmouseclick(WM_RBUTTONDOWN);
-            }
-        }
-        init_tank(xpos, ypos, 10, angle);
-        delay(20);
-        cleardevice();
-    }
+//     while (!kbhit())
+//     {
+//         while (ismouseclick(WM_RBUTTONDOWN))
+//         {
+//             init_tank(xpos, ypos, 10, angle);
+//             while (ismouseclick(WM_RBUTTONUP))
+//             {
+//                 find_mouse_pos(&p, &q);
+//                 move_tank(xpos, ypos, p, q, 10, &angle, 0.5, &xpos, &ypos);
+//                 clearmouseclick(WM_RBUTTONUP);
+//                 clearmouseclick(WM_RBUTTONDOWN);
+//             }
+//         }
+//         init_tank(xpos, ypos, 10, angle);
+//         delay(20);
+//         cleardevice();
+//     }
 
-    closegraph();
-    return 0;
-}
+//     closegraph();
+//     return 0;
+// }
