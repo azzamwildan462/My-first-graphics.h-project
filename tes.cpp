@@ -105,7 +105,6 @@ void linear_line_invers(float *x, float y, float x0, float y0, float x1, float y
 {
     *x = ((x1 - x0) * (y - y0) / (y1 - y0)) + x0;
 }
-
 void move_tank(float xpos, float ypos, float xtarget, float ytarget, float size, float *angle, float delay_ms, float *x_result, float *y_result)
 {
     float temp_angle = *angle;
@@ -300,6 +299,53 @@ void move_tank(float xpos, float ypos, float xtarget, float ytarget, float size,
     *x_result = xpass;
     *y_result = ypass;
     *angle = temp_angle;
+}
+void move_bullet(float xpos, float ypos, float xtarget, float ytarget, float size, float delay_ms, float *x_result, float *y_result)
+{
+    cleardevice();
+    float xtemp = xtarget - xpos, ytemp = ytarget - ypos;
+    int p = xtarget, q = ytarget;
+    float xpass = *x_result, ypass = *y_result;
+    if (xtemp < 0)
+        xtemp *= -1;
+    if (ytemp < 0)
+        ytemp *= -1;
+    if (xpos == xtarget && ytarget >= ypos)
+    {
+        for (float i = ypos; i < ytarget; i++)
+        {
+            circle(xpos, i, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos == xtarget && ytarget <= ypos)
+    {
+        for (float i = ypos; i > ytarget; i--)
+        {
+            circle(xpos, i, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (ypos == ytarget && xtarget >= xpos)
+    {
+        for (float i = xpos; i < xtarget; i++)
+        {
+            circle(i, ypos, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (ypos == ytarget && xtarget <= xpos)
+    {
+        for (float i = xpos; i > xtarget; i--)
+        {
+            circle(i, ypos, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
 }
 
 // int main()
