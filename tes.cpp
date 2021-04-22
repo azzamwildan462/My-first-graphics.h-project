@@ -82,16 +82,22 @@ void init_tank(float xpos, float ypos, float size, float angle)
     //laiwdidwaaw  0, 1,  2,  3, 4, 5, 6, 7, 8, 9, 10, 11,12, 13,14
     float y[n] = {5, 5, -5, -5, 4, 4, 2, 2, 6, 6, -6, -6, 8, -9, -3};
 
-    for (int i = 0; i < 3; i++)
-    {
-        line_with_rotate(xpos, ypos, x[i] * size + xpos, y[i] * size + ypos, x[i + 1] * size + xpos, y[i + 1] * size + ypos, angle);
-    }
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     line_with_rotate(xpos, ypos, x[i] * size + xpos, y[i] * size + ypos, x[i + 1] * size + xpos, y[i + 1] * size + ypos, angle);
+    // }
+    line_with_rotate(xpos, ypos, x[0] * size + xpos, y[0] * size + ypos, x[0 + 1] * size + xpos, y[0 + 1] * size + ypos, angle);
+    line_with_rotate(xpos, ypos, x[1] * size + xpos, y[1] * size + ypos, x[1 + 1] * size + xpos, y[1 + 1] * size + ypos, angle);
+    line_with_rotate(xpos, ypos, x[2] * size + xpos, y[2] * size + ypos, x[2 + 1] * size + xpos, y[2 + 1] * size + ypos, angle);
     line_with_rotate(xpos, ypos, x[0] * size + xpos, y[0] * size + ypos, x[3] * size + xpos, y[3] * size + ypos, angle);
     //bates
-    for (int i = 4; i < 7; i++)
-    {
-        line_with_rotate(xpos, ypos, x[i] * size + xpos, ypos - y[i] * size, x[i + 1] * size + xpos, ypos - y[i + 1] * size, angle);
-    }
+    // for (int i = 4; i < 7; i++)
+    // {
+    //     line_with_rotate(xpos, ypos, x[i] * size + xpos, ypos - y[i] * size, x[i + 1] * size + xpos, ypos - y[i + 1] * size, angle);
+    // }
+    line_with_rotate(xpos, ypos, x[4] * size + xpos, ypos - y[4] * size, x[4 + 1] * size + xpos, ypos - y[4 + 1] * size, angle);
+    line_with_rotate(xpos, ypos, x[5] * size + xpos, ypos - y[5] * size, x[5 + 1] * size + xpos, ypos - y[5 + 1] * size, angle);
+    line_with_rotate(xpos, ypos, x[6] * size + xpos, ypos - y[6] * size, x[6 + 1] * size + xpos, ypos - y[6 + 1] * size, angle);
     line_with_rotate(xpos, ypos, x[4] * size + xpos, ypos - y[4] * size, x[7] * size + xpos, ypos - y[7] * size, angle);
     //bates
     line_with_rotate(xpos, ypos, x[0] * size + xpos, y[8] * size + ypos, x[1] * size + xpos, y[9] * size + ypos, angle);
@@ -133,6 +139,8 @@ float find_r(float x, float y)
 
 int main()
 {
+    int xcursor, ycursor;
+
     float xpos = 200, ypos = 200;
     float x = 200, y = 200;
     float xtes = 0, ytes = 400, angle = 90;
@@ -168,6 +176,8 @@ int main()
     float xpelurudaritank2, ypelurudaritank2;
     bool isdestroybunker2 = 0;
 
+    bool openinggame = 1;
+
     initwindow(800, 800);
 
     // linear_line(5, &y, 0, 2, 10, 4);
@@ -175,6 +185,50 @@ int main()
 
     // printf("%f", find_r(6, 8));
 
+    int countcolor = 1;
+    int thiscolor;
+    bool ischanged = 0;
+    while (openinggame)
+    {
+        find_mouse_pos(&xcursor, &ycursor);
+        if (countcolor > 14)
+            countcolor = 1;
+        if (xcursor < 560 && xcursor > 100 && ycursor < 190 && ycursor > 120)
+        {
+            if (!ischanged)
+            {
+                thiscolor = countcolor;
+                ischanged = 1;
+            }
+            setcolor(thiscolor);
+        }
+        else
+        {
+            ischanged = 0;
+            setcolor(countcolor);
+        }
+        settextstyle(8, 0, 10);
+        outtextxy(100, 100, (char *)"GASSSS");
+        // textwidth(12);
+        if (ismouseclick(WM_LBUTTONDOWN))
+        {
+            // printf("%d,%d\n", xcursor, ycursor);
+            if (xcursor < 560 && xcursor > 100 && ycursor < 190 && ycursor > 120)
+            {
+
+                openinggame = 0;
+            }
+            clearmouseclick(WM_LBUTTONDOWN);
+        }
+        setcolor(countcolor + 1);
+        // settextstyle(8, 0, 9);
+        line(100, 220, 560, 220);
+        // outtextxy(101, 101, (char *)"GASSSS");
+        countcolor++;
+        delay(300);
+    }
+
+    setcolor(7);
     while (!kbhit())
     {
         xpelurudaritank = xtarpeluruTank - xbunker;
@@ -228,20 +282,6 @@ int main()
         // ypeluru += dypeluru;
         // circle(xpeluru, ypeluru, 20);
 
-        // init_bullet(200, 200, 10, 5, angle);
-        // printf("%d %d %f %f\n", p, q, xpos, ypos);
-        // while (ismouseclick(WM_RBUTTONDOWN))
-        // {
-        //     init_tank(xpos, ypos, sizetank, angle);
-        //     while (ismouseclick(WM_RBUTTONUP))
-        //     {
-        //         find_mouse_pos(&p, &q);
-        //         angle = find_direction(xpos, ypos, p, q);
-        //         // move_tank(xpos, ypos, p, q, sizetank, &angle, 0.5, &xpos, &ypos);
-        //         clearmouseclick(WM_RBUTTONUP);
-        //         clearmouseclick(WM_RBUTTONDOWN);
-        //     }
-        // }
         if (ismouseclick(WM_RBUTTONDOWN))
         {
             find_mouse_pos(&p, &q);
