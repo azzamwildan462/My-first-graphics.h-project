@@ -1,0 +1,243 @@
+void move_tank(float xpos, float ypos, float xtarget, float ytarget, float size, float *angle, float delay_ms, float *x_result, float *y_result)
+{
+    float temp_angle = *angle;
+    float xtemp = xtarget - xpos, ytemp = ytarget - ypos;
+    int p = xtarget, q = ytarget;
+    float xpass = *x_result, ypass = *y_result;
+    if (xtemp < 0)
+        xtemp *= -1;
+    if (ytemp < 0)
+        ytemp *= -1;
+    if (xpos == xtarget && ytarget >= ypos)
+    {
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = ypos; i < ytarget; i++)
+        {
+            init_tank(xpos, i, size, *angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos == xtarget && ytarget <= ypos)
+    {
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = ypos; i > ytarget; i--)
+        {
+            init_tank(xpos, i, size, *angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (ypos == ytarget && xtarget >= xpos)
+    {
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = xpos; i < xtarget; i++)
+        {
+            init_tank(i, ypos, size, *angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (ypos == ytarget && xtarget <= xpos)
+    {
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = xpos; i > xtarget; i--)
+        {
+            init_tank(i, ypos, size, *angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos != xtarget && ypos >= ytarget && ytemp >= xtemp)
+    {
+        clearmouseclick(WM_RBUTTONDOWN);
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = ypos, y; i > ytarget; i--)
+        {
+            init_tank(y, i, size, temp_angle);
+            circle(xtarget, ytarget, 10);
+            xpass = xtarget;
+            ypass = ytarget;
+            if (ismouseclick(WM_RBUTTONDOWN))
+            {
+                while (1)
+                {
+                    if (ismouseclick(WM_RBUTTONUP))
+                    {
+                        find_mouse_pos(&p, &q);
+                        xpass = p;
+                        ypass = q;
+                        move_tank(y, i, p, q, 10, &temp_angle, delay_ms, &xpass, &ypass);
+                        // linear_line_invers(&y, i, xpos, ypos, xtarget, ytarget);
+                        // init_tank(y, i, size, temp_angle);
+                        clearmouseclick(WM_RBUTTONUP);
+                        break;
+                    }
+                }
+                clearmouseclick(WM_RBUTTONDOWN);
+                break;
+            }
+            linear_line_invers(&y, i, xpos, ypos, xtarget, ytarget);
+            init_tank(y, i, size, temp_angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos != xtarget && ypos <= ytarget && ytemp >= xtemp)
+    {
+        clearmouseclick(WM_RBUTTONDOWN);
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = ypos, y; i < ytarget; i++)
+        {
+            init_tank(y, i, size, temp_angle);
+            circle(xtarget, ytarget, 10);
+            xpass = xtarget;
+            ypass = ytarget;
+            if (ismouseclick(WM_RBUTTONDOWN))
+            {
+                while (1)
+                {
+                    if (ismouseclick(WM_RBUTTONUP))
+                    {
+                        find_mouse_pos(&p, &q);
+                        xpass = p;
+                        ypass = q;
+                        move_tank(y, i, p, q, 10, &temp_angle, delay_ms, &xpass, &ypass);
+                        // linear_line_invers(&y, i, xpos, ypos, xtarget, ytarget);
+                        // init_tank(y, i, size, temp_angle);
+                        clearmouseclick(WM_RBUTTONUP);
+                        break;
+                    }
+                }
+                clearmouseclick(WM_RBUTTONDOWN);
+                break;
+            }
+            linear_line_invers(&y, i, xpos, ypos, xtarget, ytarget);
+            init_tank(y, i, size, temp_angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos >= xtarget && ypos != ytarget && ytemp <= xtemp)
+    {
+        clearmouseclick(WM_RBUTTONDOWN);
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = xpos, y; i > xtarget; i--)
+        {
+            init_tank(i, y, size, temp_angle);
+            circle(xtarget, ytarget, 10);
+            xpass = xtarget;
+            ypass = ytarget;
+            if (ismouseclick(WM_RBUTTONDOWN))
+            {
+                while (1)
+                {
+                    if (ismouseclick(WM_RBUTTONUP))
+                    {
+                        find_mouse_pos(&p, &q);
+                        xpass = p;
+                        ypass = q;
+                        move_tank(i, y, p, q, 10, &temp_angle, delay_ms, &xpass, &ypass);
+                        // linear_line(i, &y, xpos, ypos, xtarget, ytarget);
+                        // init_tank(i, y, size, temp_angle);
+                        clearmouseclick(WM_RBUTTONUP);
+                        break;
+                    }
+                }
+                clearmouseclick(WM_RBUTTONDOWN);
+                break;
+            }
+            linear_line(i, &y, xpos, ypos, xtarget, ytarget);
+            init_tank(i, y, size, temp_angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos <= xtarget && ypos != ytarget && ytemp <= xtemp)
+    {
+        clearmouseclick(WM_RBUTTONDOWN);
+        temp_angle = find_direction(xpos, ypos, xtarget, ytarget);
+        for (float i = xpos, y; i < xtarget; i++)
+        {
+            init_tank(i, y, size, temp_angle);
+            circle(xtarget, ytarget, 10);
+            xpass = xtarget;
+            ypass = ytarget;
+            if (ismouseclick(WM_RBUTTONDOWN))
+            {
+                while (1)
+                {
+                    if (ismouseclick(WM_RBUTTONUP))
+                    {
+                        find_mouse_pos(&p, &q);
+                        xpass = p;
+                        ypass = q;
+
+                        move_tank(i, y, p, q, 10, &temp_angle, delay_ms, &xpass, &ypass);
+                        // linear_line(i, &y, xpos, ypos, xtarget, ytarget);
+                        // init_tank(i, y, size, temp_angle);
+                        clearmouseclick(WM_RBUTTONUP);
+                        break;
+                    }
+                }
+                clearmouseclick(WM_RBUTTONDOWN);
+                break;
+            }
+            linear_line(i, &y, xpos, ypos, xtarget, ytarget);
+            init_tank(i, y, size, temp_angle);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    // init_tank(xtarget, ytarget, size, temp_angle);
+    *x_result = xpass;
+    *y_result = ypass;
+    *angle = temp_angle;
+}
+void move_bullet(float xpos, float ypos, float xtarget, float ytarget, float size, float delay_ms, float *x_result, float *y_result)
+{
+    cleardevice();
+    float xtemp = xtarget - xpos, ytemp = ytarget - ypos;
+    int p = xtarget, q = ytarget;
+    float xpass = *x_result, ypass = *y_result;
+    if (xtemp < 0)
+        xtemp *= -1;
+    if (ytemp < 0)
+        ytemp *= -1;
+    if (xpos == xtarget && ytarget >= ypos)
+    {
+        for (float i = ypos; i < ytarget; i++)
+        {
+            circle(xpos, i, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (xpos == xtarget && ytarget <= ypos)
+    {
+        for (float i = ypos; i > ytarget; i--)
+        {
+            circle(xpos, i, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (ypos == ytarget && xtarget >= xpos)
+    {
+        for (float i = xpos; i < xtarget; i++)
+        {
+            circle(i, ypos, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+    else if (ypos == ytarget && xtarget <= xpos)
+    {
+        for (float i = xpos; i > xtarget; i--)
+        {
+            circle(i, ypos, size);
+            delay(delay_ms);
+            cleardevice();
+        }
+    }
+}
